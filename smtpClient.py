@@ -16,13 +16,22 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     # Fill in start
 
     
-    file_content = ""
+    password = ""
+    file_sender = ""
     file_receiver = ""
 
+    # This is a mess but we can clean it up later if necessary
     try:
         with open('.smtppassword', 'r') as file:
-            # The 'r' mode means read-only.
-            file_content = file.read()
+            password = file.read()
+    except FileNotFoundError:
+        print("Error: The file 'my_file.txt' was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    try:
+        with open('.senderemailaccount', 'r') as file:
+            file_sender = file.read()
     except FileNotFoundError:
         print("Error: The file 'my_file.txt' was not found.")
     except Exception as e:
@@ -30,7 +39,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
     try:
         with open('.receiveremailaccount', 'r') as file:
-            # The 'r' mode means read-only.
             file_receiver = file.read()
     except FileNotFoundError:
         print("Error: The file 'my_file.txt' was not found.")
@@ -40,8 +48,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     try:
         smtp_server = "smtp.gmail.com"
         smtp_port = 587# For starttls
-        sender_email = "eu2138@nyu.edu"
-        password = file_content 
 
         # Create a secure SSL context
         # context = ssl.create_default_context()
@@ -51,21 +57,12 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         print("initializing server variable\n")
 
         server = smtplib.SMTP(smtp_server,smtp_port,timeout=30)
-        #print("server")
-        # Create a secure SSL context
-        #context = ssl.create_default_context()
-        #server.starttls(context=context) # Secure the connection
         server.starttls() # Secure the connection
-        #server.helo() # Can be omitted
-        print("pre-login")
         server.login(sender_email, password)
         server.helo() # Can be omitted
-        print("post-login")
         server.sendmail(sender_email, file_receiver, "Hello World!")
-        print("sent mail successful")
         server.quit()
 
-        print("break")
         # recv = clientSocket.recv(1024).decode()
         # print(recv) #You can use these print statement to validate return codes from the server.
         #if recv[:3] != '220':
@@ -75,7 +72,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
         msg = "\r\n My message"
         endmsg = "\r\n.\r\n"
-        print("break")
 
         # Choose a mail server (e.g. Google mail server) if you want to verify the script beyond GradeScope
 
@@ -94,9 +90,7 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
         heloCommand = 'HELO Alice\r\n'
         clientSocket.send(heloCommand.encode())
-        print("break")
         recv1 = clientSocket.recv(1024).decode()
-        print("break")
         #print(recv1) 
         #if recv1[:3] != '250':
         #    print('250 reply not received from server.')
@@ -128,8 +122,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         # Fill in end
 
 
-
-
     except Exception as e:
         # Print any error messages to stdout
         logging.basicConfig(level=logging.ERROR)  # Set logging level
@@ -138,7 +130,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         # Send QUIT command and handle server response.
         # Fill in start
     finally:
-        print("Closing sockets\n")
         clientSocket.close()
         serverSocket.close()
         # Fill in end
