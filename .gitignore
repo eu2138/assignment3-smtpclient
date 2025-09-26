@@ -1,3 +1,8 @@
 .smtppassword
 .senderemailaccount
 .receiveremailaccount
+
+
+.smtpClient.py.swo
+.smtpClient.py.swp
+__pycache__/
