@@ -17,11 +17,21 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
     
     file_content = ""
+    file_receiver = ""
 
     try:
         with open('.smtppassword', 'r') as file:
             # The 'r' mode means read-only.
             file_content = file.read()
+    except FileNotFoundError:
+        print("Error: The file 'my_file.txt' was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    try:
+        with open('.receiveremailaccount', 'r') as file:
+            # The 'r' mode means read-only.
+            file_receiver = file.read()
     except FileNotFoundError:
         print("Error: The file 'my_file.txt' was not found.")
     except Exception as e:
@@ -51,7 +61,7 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         server.login(sender_email, password)
         server.helo() # Can be omitted
         print("post-login")
-        server.sendmail(sender_email, "ungericwei@gmail.com", "Hello World!")
+        server.sendmail(sender_email, file_receiver, "Hello World!")
         print("sent mail successful")
         server.quit()
 
