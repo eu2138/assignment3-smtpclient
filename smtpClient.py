@@ -86,6 +86,9 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         #serverSocket.listen()
         # serverSocket.connect((mailserver, port))
         #clientSocket, addr = serverSocket.accept() #Fill in start -are you accepting connections?     #Fill in end
+
+        # The python function for the socket library called, connect, returns two responses
+        # One is the 220 response and the other is the 250 code response
         clientSocket.connect((mailserver, port))
         # val = "220 220 220 220 220\r\n"
         # clientSocket.send(val.encode())
@@ -98,8 +101,8 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         recv = clientSocket.recv(1024).decode()
         # print("Receive: " + recv[:3] + " : End\n") #You can use these print statement to validate return codes from the server.
         print(recv)
-        #if recv[:3] != '220':
-        #    print('220 reply not received from server.')  
+        if recv[:3] != '220':
+            print('220 reply not received from server.')  
 
         heloCommand = 'HELO Alice\r\n'
         clientSocket.send(heloCommand.encode())
@@ -108,8 +111,8 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         clientSocket.send("hello".encode())
 
         print(recv1) 
-        # if recv1[:3] != '250':
-        #    print('250 reply not received from server.')
+        if recv1[:3] != '250':
+            print('250 reply not received from server.')
 
         # TODO: Send email here
         # Send MAIL FROM command and handle server response.
