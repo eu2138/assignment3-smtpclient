@@ -5,9 +5,6 @@ from socket import *
 # from email.message import EmailMessage
 import logging
 
-smtp_server = 'smtp.gmail.com'
-smtp_port = 587 # For starttls
-
 # smtp_server = "127.0.0.1"
 # smtp_port = 1025 # For starttls
 
@@ -36,8 +33,21 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
         serverAddress = (mailserver, port)
 
+        #print("Ok")
+
         clientSocket = socket(AF_INET, SOCK_STREAM)
+
+        #print("Ok")
+
+        #Prepare a server socket
+        #clientSocket.bind(serverAddress)
+
+        #Fill in start
+        #clientSocket.listen(1)
+
         clientSocket.connect(serverAddress)
+
+        #print("Ok")
 
         # Create a secure SSL context
         # context = ssl.create_default_context()
@@ -56,7 +66,7 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
         recv = clientSocket.recv(1024).decode()
         # print("Receive: " + recv[:3] + " : End\n") #You can use these print statement to validate return codes from the server.
-        print(recv)
+        #print(recv)
         if recv[:3] != '220':
             print('220 reply not received from server.')  
 
@@ -64,7 +74,7 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         clientSocket.send(heloCommand.encode())
         recv1 = clientSocket.recv(1024).decode()
 
-        print(recv1) 
+        #print(recv1) 
         if recv1[:3] != '250':
             print('250 reply not received from server.')
 
@@ -124,5 +134,7 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
 
 if __name__ == '__main__':
-    smtp_client(1025, '127.0.0.1')
-    # smtp_client(smtp_port, smtp_server)
+    #smtp_client(1025, '127.0.0.1')
+    #smtp_server = 'smtp.gmail.com'
+    #smtp_port = 587 # For starttls
+    smtp_client(587, 'smtp.gmail.com')
