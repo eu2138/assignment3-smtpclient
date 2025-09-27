@@ -12,7 +12,7 @@ smtp_port = 587 # For starttls
 # smtp_port = 1025 # For starttls
 
 def smtp_client(port=1025, mailserver='127.0.0.1'):
-    message = "\r\n My message"
+    msg = "\r\n My message"
     endmsg = "\r\n.\r\n"
 
     # Choose a mail server (e.g. Google mail server) if you want to verify the script beyond GradeScope
@@ -51,14 +51,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         print(f"An error occurred: {e}")
 
     try:
-
-        # --- Email Content ---
-#        msg = EmailMessage()
-#        msg.set_content("This is a test email sent from a localhost Python script connecting to Gmail's SMTP server.")
-#        msg['Subject'] = 'Test Email from Localhost Client'
-#        msg['From'] = SENDER_EMAIL
-#        msg['To'] = RECIPIENT_EMAIL 
-
         # Choose a mail server (e.g. Google mail server) if you want to verify the script beyond GradeScope
 
         # Create socket called clientSocket and establish a TCP connection with mailserver and port
@@ -67,9 +59,24 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         
         # Instantiate socket called clientSocket
 
-        clientSocket = socket(AF_INET, SOCK_STREAM)
-        clientSocket.connect((mailserver, port))
+        serverAddress = (mailserver, port)
 
+        clientSocket = socket(AF_INET, SOCK_STREAM)
+        clientSocket.connect(serverAddress)
+
+        # Create a secure SSL context
+        # context = ssl.create_default_context()
+
+        # print("server: " + mailserver + " port: " + str(port))
+        #server = smtplib.SMTP(mailserver,port)
+        # print("ok")
+        #server.helo() # Can be omitted
+        # server.starttls() # Secure the connection
+        # print("ok")
+        # server.helo() # Can be omitted
+        # server.login(SENDER_EMAIL, PASSWORD)
+
+        # TODO: Send email here
         # Fill in end
 
         recv = clientSocket.recv(1024).decode()
@@ -82,8 +89,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         clientSocket.send(heloCommand.encode())
         recv1 = clientSocket.recv(1024).decode()
 
-        clientSocket.send("hello".encode())
-
         print(recv1) 
         if recv1[:3] != '250':
             print('250 reply not received from server.')
@@ -92,21 +97,22 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         # Send MAIL FROM command and handle server response.
         # Fill in start
 
-        # server.sendmail(SENDER_EMAIL, RECIPIENT_EMAIL, recv + "\n" + recv1)
+        # server.send("MAIL FROM".encode())
+        clientSocket.send("MAIL FROM".encode())
         
         # Fill in end
 
-        # Send RCPT TO command and handle server response.
+        # Send RCPT TO command and handle clientSocket response.
         # Fill in start
 
-        # server.sendto("RCPT TO", mailserver)
+        clientSocket.send("RCPT TO".encode())
 
-        # Fill in end
+        # Fill in en
 
-        # Send DATA command and handle server response.
+        # Send DATA command and handle clientSocket response.
         # Fill in start
 
-        #server.send("DATA")
+        clientSocket.send("DATA".encode())
 
         # Fill in end
 
@@ -117,14 +123,14 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         #    (socket.SOL_SOCKET, socket.SCM_RIGHTS, fd_to_send_bytes)
         #]
 
-        # server.sendmsg("message")
+        clientSocket.send(msg.encode())
 
         # Fill in end
 
-        # Message ends with a single period, send message end and handle server response.
+        # Message ends with a single period, send message end and handle clientSocket response.
         # Fill in start
         
-        # server.sendall("message.")
+        clientSocket.send((endmsg).encode())
 
         # Fill in end
 
@@ -138,6 +144,7 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         # Fill in start
     finally:
         clientSocket.close()
+        # server.quit()
         # Fill in end
 
 
