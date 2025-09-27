@@ -65,37 +65,11 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
         # Fill in start
         
-        # =====================================================================
-
-        # Use Google mail server
-        # server = smtplib.SMTP(smtp_server,smtp_port,timeout=30)
-        # server.starttls() # Secure the connection
-        # server.login(SENDER_EMAIL, PASSWORD)
-        # server.send_message(msg)
-        # server.sendmail(SENDER_EMAIL, RECIPIENT_EMAIL, "Hello World!")
-        # server.quit()
-
-        # =====================================================================
-
         # Instantiate socket called clientSocket
 
-        serverSocket = socket(AF_INET, SOCK_STREAM)
         clientSocket = socket(AF_INET, SOCK_STREAM)
-        print("mailserver: " + str(mailserver) + " : " + str(port))
-        #serverSocket.bind((mailserver, port))
-        #serverSocket.listen()
-        # serverSocket.connect((mailserver, port))
-        #clientSocket, addr = serverSocket.accept() #Fill in start -are you accepting connections?     #Fill in end
-
-        # The python function for the socket library called, connect, returns two responses
-        # One is the 220 response and the other is the 250 code response
         clientSocket.connect((mailserver, port))
-        # val = "220 220 220 220 220\r\n"
-        # clientSocket.send(val.encode())
 
-        # =====================================================================
-
-        
         # Fill in end
 
         recv = clientSocket.recv(1024).decode()
@@ -124,18 +98,34 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
         # Send RCPT TO command and handle server response.
         # Fill in start
+
+        # server.sendto("RCPT TO", mailserver)
+
         # Fill in end
 
         # Send DATA command and handle server response.
         # Fill in start
+
+        #server.send("DATA")
+
         # Fill in end
 
         # Send message data.
         # Fill in start
+
+        #ancillary_data = [
+        #    (socket.SOL_SOCKET, socket.SCM_RIGHTS, fd_to_send_bytes)
+        #]
+
+        # server.sendmsg("message")
+
         # Fill in end
 
         # Message ends with a single period, send message end and handle server response.
         # Fill in start
+        
+        # server.sendall("message.")
+
         # Fill in end
 
 
@@ -148,7 +138,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
         # Fill in start
     finally:
         clientSocket.close()
-        serverSocket.close()
         # Fill in end
 
 
