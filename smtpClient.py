@@ -21,34 +21,9 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
     # Fill in start
 
-    PASSWORD = ""
-    SENDER_EMAIL = ""
-    RECIPIENT_EMAIL = ""
-
-    # This is a mess but we can clean it up later if necessary
-    try:
-        with open('.smtppassword', 'r') as file:
-            PASSWORD = file.read()
-    except FileNotFoundError:
-        print("Error: The file 'my_file.txt' was not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-    try:
-        with open('.senderemailaccount', 'r') as file:
-            SENDER_EMAIL = file.read()
-    except FileNotFoundError:
-        print("Error: The file 'my_file.txt' was not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-    try:
-        with open('.receiveremailaccount', 'r') as file:
-            RECIPIENT_EMAIL = file.read()
-    except FileNotFoundError:
-        print("Error: The file 'my_file.txt' was not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    # PASSWORD = ""
+    # SENDER_EMAIL = ""
+    # RECIPIENT_EMAIL = ""
 
     try:
         # Choose a mail server (e.g. Google mail server) if you want to verify the script beyond GradeScope
